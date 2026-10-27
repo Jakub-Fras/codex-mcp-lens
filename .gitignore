@@ -1,0 +1,31 @@
+# Personal reports and local scan state. Never publish these.
+/*.html
+!/mcp-lens-demo.html
+/*-snapshot.json
+*.backup-*
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.log
+.env
+.env.*
+*.pem
+*.p12
+*.pfx
+*.key
+
+# Local Python and design-tool files.
+__pycache__/
+*.py[cod]
+.DS_Store
+/.taste-skill/
+/.agents/
+/.codex/
+/publish-ready/
+/mcp-lens-publish-ready.zip
+
+# Internal notes about this computer and pre-release checks.
+/QA-100-CASES.md
+/QA-REVIEW.md
+/RELEASE-READINESS.md
