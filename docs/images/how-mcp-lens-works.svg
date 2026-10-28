@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-labelledby="title desc">
+  <title id="title">What MCP Lens checks</title>
+  <desc id="desc">Codex settings, plugin files, and saved request history are read locally to create a report showing what was found, where it came from, and what can be changed.</desc>
+  <rect width="1200" height="280" rx="12" fill="#f5f7f8"/>
+  <text x="36" y="44" fill="#5a6871" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" letter-spacing="1.5">WHAT IT CHECKS</text>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="35" y="68" width="247" height="48" rx="7" fill="#fff" stroke="#cfd8dd"/>
+    <rect x="35" y="123" width="247" height="48" rx="7" fill="#fff" stroke="#cfd8dd"/>
+    <rect x="35" y="178" width="247" height="48" rx="7" fill="#fff" stroke="#cfd8dd"/>
+    <circle cx="58" cy="92" r="6" fill="#688597"/><circle cx="58" cy="147" r="6" fill="#688597"/><circle cx="58" cy="202" r="6" fill="#688597"/>
+    <text x="76" y="98" fill="#22313a" font-size="18">Codex settings</text>
+    <text x="76" y="153" fill="#22313a" font-size="18">Saved plugin files</text>
+    <text x="76" y="208" fill="#22313a" font-size="18">Request history</text>
+    <path d="M282 147 H360" stroke="#718590" stroke-width="2" fill="none"/>
+    <path d="M352 139 L360 147 L352 155" stroke="#718590" stroke-width="2" fill="none"/>
+    <rect x="370" y="96" width="234" height="102" rx="10" fill="#152029"/>
+    <circle cx="414" cy="147" r="20" fill="none" stroke="#ee765c" stroke-width="5"/>
+    <path d="M428 162 L445 179" stroke="#ee765c" stroke-width="6" stroke-linecap="round"/>
+    <text x="460" y="153" fill="#fff" font-size="25" font-weight="700">MCP Lens</text>
+    <path d="M604 147 H680" stroke="#718590" stroke-width="2" fill="none"/>
+    <path d="M672 139 L680 147 L672 155" stroke="#718590" stroke-width="2" fill="none"/>
+    <rect x="690" y="68" width="474" height="158" rx="9" fill="#fff" stroke="#cfd8dd"/>
+    <rect x="690" y="68" width="474" height="39" rx="9" fill="#e7edf0"/>
+    <path d="M690 98 H1164" stroke="#cfd8dd"/>
+    <circle cx="711" cy="88" r="4" fill="#ee765c"/><circle cx="725" cy="88" r="4" fill="#d6a96b"/><circle cx="739" cy="88" r="4" fill="#7ca392"/>
+    <text x="767" y="94" fill="#22313a" font-size="17" font-weight="700">Your local report</text>
+    <text x="716" y="136" fill="#22313a" font-size="18">What is listed?</text>
+    <text x="716" y="167" fill="#22313a" font-size="18">Where did we find it?</text>
+    <text x="716" y="198" fill="#22313a" font-size="18">What can you do?</text>
+  </g>
+  <text x="36" y="257" fill="#65747d" font-family="Arial, Helvetica, sans-serif" font-size="15">The report uses saved local evidence. It does not test an outside account or MCP server.</text>
+</svg>

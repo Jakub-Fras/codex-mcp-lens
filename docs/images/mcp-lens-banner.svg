@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">MCP Lens</title>
+  <desc id="desc">MCP Lens: see the apps, MCP servers, and saved activity in your Codex setup.</desc>
+  <rect width="1280" height="360" fill="#152029"/>
+  <rect x="48" y="45" width="6" height="270" rx="3" fill="#ee765c"/>
+  <text x="86" y="111" fill="#aebdc7" font-family="Arial, Helvetica, sans-serif" font-size="18" letter-spacing="2.5">A LOCAL VIEW OF YOUR CODEX SETUP</text>
+  <text x="80" y="205" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="700" letter-spacing="-4">MCP Lens</text>
+  <text x="85" y="248" fill="#d5dfe5" font-family="Arial, Helvetica, sans-serif" font-size="24">Know what Codex can use.</text>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#e6eef2" text-anchor="middle">
+    <rect x="86" y="276" width="75" height="32" rx="16" fill="#2c3a43"/><text x="123" y="297">Apps</text>
+    <rect x="171" y="276" width="121" height="32" rx="16" fill="#2c3a43"/><text x="232" y="297">MCP servers</text>
+    <rect x="302" y="276" width="121" height="32" rx="16" fill="#2c3a43"/><text x="362" y="297">Saved activity</text>
+  </g>
+  <g fill="none" stroke="#5f7886">
+    <circle cx="1020" cy="180" r="132" stroke-width="1.5"/>
+    <circle cx="1020" cy="180" r="91" stroke-width="1.5"/>
+    <circle cx="1020" cy="180" r="49" stroke-width="1.5"/>
+    <path d="M891 158 L972 175 M1070 180 L1145 180 M992 224 L955 292" stroke-width="2"/>
+  </g>
+  <circle cx="891" cy="158" r="7" fill="#dce8ed"/>
+  <circle cx="1145" cy="180" r="7" fill="#dce8ed"/>
+  <circle cx="955" cy="292" r="7" fill="#dce8ed"/>
+  <circle cx="1020" cy="180" r="27" fill="#ee765c"/>
+  <circle cx="1020" cy="180" r="10" fill="#152029"/>
+  <path d="M1042 201 L1061 220" stroke="#ee765c" stroke-width="10" stroke-linecap="round"/>
+</svg>

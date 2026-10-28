@@ -1,12 +1,14 @@
 # MCP Lens
 
+![MCP Lens: a local view of apps, MCP servers, and saved activity in Codex](docs/images/mcp-lens-banner.svg)
+
 **See which apps and MCP servers Codex knows about, where they came from, and when Codex last asked them to do something.**
 
 It is easy to add a tool to Codex and forget about it. MCP Lens gives you one local report to review those tools. It shows the latest requests it can find, points you to the setting or plugin behind each entry, and explains what you can turn off or remove. You do not need to know how to read a Codex configuration file.
 
 MCP Lens is for reviewing **your own Codex setup**. It does not scan MCP servers for vulnerabilities or decide that a tool is safe.
 
-## Get started
+## Get started on a Mac
 
 On a Mac, double-click [Open MCP Lens.command](./Open%20MCP%20Lens.command). You need Python 3.11 or newer. For the fullest report, the `codex` command must also work on your computer. If macOS blocks the downloaded launcher, run this from Terminal in the MCP Lens folder instead:
 
@@ -19,7 +21,27 @@ The launcher asks whether to check the Codex settings for a particular folder. C
 
 The launcher makes `mcp-lens-report.html`, opens it in your browser, and starts a temporary local manager. **Keep the Terminal window open** while using the report's **Turn off** and **Remove** buttons. If you open the saved HTML file directly, you can read it but cannot change settings from it. The launcher also makes `mcp-lens-share.html`, a separate counts-only summary.
 
-Want to see the report before checking your own setup? Open [the fictional demo](./mcp-lens-demo.html). It uses invented data.
+### What the terminal looks like
+
+![A terminal preview showing MCP Lens listing a fictional app with activity, another without matching activity, and an MCP server](docs/images/terminal-preview.jpg)
+
+*This preview uses MCP Lens's terminal output with fictional names and dates. No real Codex account was checked for the image.*
+
+## See a sample report
+
+Open [the interactive demo report](./mcp-lens-demo.html) to explore it yourself. The screenshots below use the same invented data.
+
+### At a glance
+
+![Fictional MCP Lens report showing counts and separate sections for apps with requests, other apps, and MCP servers](docs/images/demo-list.jpg)
+
+The first view separates apps with recorded requests from other apps and MCP servers found in settings.
+
+### Inside an app entry
+
+![Expanded fictional app entry showing dated requests and the kinds of actions found in saved history](docs/images/demo-activity.jpg)
+
+An entry shows what was recorded and says when account access cannot be checked.
 
 ## Why look at these connections?
 
@@ -27,7 +49,11 @@ An MCP server gives Codex tools supplied by another program or service. Dependin
 
 That does not mean every connection is dangerous. It means you should be able to answer a few ordinary questions: **What did I add? Is it still on? Has Codex asked it to do anything recently? Do I still need it?** MCP Lens brings together the local records that can help you answer them.
 
-## What you will see
+## What MCP Lens checks
+
+![Codex settings, saved plugin files, and request history feed a local MCP Lens report](docs/images/how-mcp-lens-works.svg)
+
+The report brings together these local sources. You can then review:
 
 - **Apps (connectors):** Apps Codex lists as on, plus apps with matching requests in saved history. An app being on in Codex does not confirm that its outside account is connected.
 - **MCP servers:** Entries found in Codex settings or saved plugin files. A plugin file on your computer does not, by itself, prove that its server is enabled or running.
@@ -37,11 +63,11 @@ That does not mean every connection is dangerous. It means you should be able to
 
 Open any entry in the report to see what MCP Lens found, what it could not confirm, and the action available for that entry. A red triangle is a reminder to review; it is not a finding that a tool is unsafe.
 
-### About the activity dates
+### What activity dates mean
 
 “No matching request” means MCP Lens found none in the saved Codex records it could read. It does **not** mean the tool was never used. History may be missing or rotated, and some older calls do not contain enough information to assign them to a particular app. “First observed” is the earliest matching saved request, not the install date. If a file or record could not be read, the report says so.
 
-### About access and permissions
+### What it cannot confirm about access
 
 The report can show local tool settings, approval rules, saved tool names, and descriptions when Codex provides them. Those are clues, not a complete list of what an outside account or MCP server can access. MCP Lens cannot verify the permissions granted inside Notion, GitHub, or another service; it does not run servers, inspect their code, or detect prompt injection. Server-provided descriptions and safety hints may be wrong or out of date.
 
