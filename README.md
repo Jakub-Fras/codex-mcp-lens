@@ -121,4 +121,6 @@ python3 -m unittest discover -s tests -v
 
 The fixtures cover local behavior and a simulated Codex app server. They cannot verify every Codex version or outside account.
 
+To build a source ZIP, run `python3 scripts/build_release.py` from a clean checkout. The builder accepts only the reviewed source, tests, and fictional images. It stops if extra files such as a generated report or Python cache are present.
+
 **Keep your generated report to yourself unless you have reviewed it.** It can contain app names, file names, folder paths, and activity from your computer. The counts-only share file is a different output. Before publishing a fork or release bundle, check its actual contents: `.gitignore` cannot protect a manual ZIP, a custom output path, or a file already committed to Git history.

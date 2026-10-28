@@ -1,7 +1,7 @@
 # Personal reports and local scan state. Never publish these.
-/*.html
-!/mcp-lens-demo.html
-/*-snapshot.json
+*.html
+!mcp-lens-demo.html
+*-snapshot.json
 *.backup-*
 *.sqlite
 *.sqlite-*
