@@ -31,6 +31,8 @@ FILES = (
 
 PRIVATE_PATTERNS = {
     "home-folder path": re.compile(rb"(?i)/(?:Users|home)/[a-z][a-z0-9._-]{2,}"),
+    "Windows home-folder path": re.compile(rb"(?i)[a-z]:\\Users\\[a-z][a-z0-9._-]{2,}"),
+    "temporary device path": re.compile(rb"/private/var/folders/[a-z0-9_/-]{12,}"),
     "email address": re.compile(rb"(?i)[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}"),
     "credential": re.compile(
         rb"(?i)(?:-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|"
