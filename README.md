@@ -19,7 +19,7 @@ python3 mcp_lens.py manage --project . --report mcp-lens-report.html
 
 The launcher asks whether to check the Codex settings for a particular folder. Choose one if you want to see the settings that apply there and any saved Codex file-edit records for it. Press Return to use your home folder. Connection activity still covers saved Codex history across folders.
 
-The launcher makes `mcp-lens-report.html`, opens it in your browser, and starts a temporary local manager. **Keep the Terminal window open** while using the report's **Turn off** and **Remove** buttons. If you open the saved HTML file directly, you can read it but cannot change settings from it. The launcher also makes `mcp-lens-share.html`, a separate counts-only summary.
+The launcher makes `mcp-lens-report.html`, opens it in your browser, and starts a temporary local manager. **Keep the Terminal window open** while using the report's **Turn off** and **Remove** buttons. The manager builds its own fresh browser view; it does not run a saved HTML file. The saved report stays as it was until you change a setting. If you open that file directly, you can read it but cannot change settings from it. The launcher also makes `mcp-lens-share.html`, a separate counts-only summary.
 
 ### What the terminal looks like
 
@@ -92,6 +92,7 @@ python3 mcp_lens.py report --snapshot mcp-lens-snapshot.json
 ```
 
 The snapshot stores entry IDs, tool names, and fingerprints. It does not store endpoints, command arguments, tool descriptions, credentials, or request contents. A changed tool list is a reason to review, not proof of malicious behavior.
+The comparison appears in the saved HTML file. The manager shows a fresh view of current settings; if you change a setting there, it updates the saved report. Keep a copy of the comparison first if you want to refer to it later.
 
 Review MCP entries whose **last matching saved request** is more than 90 days old:
 
