@@ -851,6 +851,33 @@ for line in sys.stdin:
         self.assertNotIn("global-old", tomllib.loads(self.config.read_text())["mcp_servers"])
         self.assertFalse(list(self.home.glob("config.toml.backup-*")))
 
+    def test_local_manager_never_serves_supplied_or_replaced_html(self):
+        report = self.root / "private-report.html"
+        malicious = "<html><script>window.untrusted_report_marker = true</script></html>"
+        report.write_text(malicious, encoding="utf-8")
+        process = subprocess.Popen(
+            [sys.executable, str(SCRIPT), "--home", str(self.home), "manage", "--no-open",
+             "--project", str(self.root), "--report", str(report)],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+            env={**os.environ, "PATH": "", "CODEX_HOME": str(self.home)},
+        )
+        def stop_manager():
+            if process.poll() is None:
+                process.terminate()
+            process.communicate(timeout=5)
+        self.addCleanup(stop_manager)
+        self.assertIn("running on this computer", process.stdout.readline())
+        url = process.stdout.readline().strip().split(": ", 1)[1]
+        trusted_page = urllib.request.urlopen(url, timeout=5).read().decode("utf-8")
+        self.assertIn('data-action="disable"', trusted_page)
+        self.assertNotIn("untrusted_report_marker", trusted_page)
+        self.assertEqual(report.read_text(encoding="utf-8"), malicious)
+
+        report.write_text(malicious, encoding="utf-8")
+        later_page = urllib.request.urlopen(url, timeout=5).read().decode("utf-8")
+        self.assertEqual(later_page, trusted_page)
+        self.assertTrue(tomllib.loads(self.config.read_text())["mcp_servers"]["global-old"]["enabled"])
+
     def test_local_manager_turns_off_app_and_reports_verified_state(self):
         self.config.write_text('[plugins."notes@local"]\nenabled = true\n', encoding="utf-8")
         manifest = self.home / "plugins/cache/local/notes/1.0.0/.app.json"
@@ -975,6 +1002,7 @@ for line in sys.stdin:
         self.addCleanup(stop_manager)
         self.assertIn("running on this computer", process.stdout.readline())
         url = process.stdout.readline().strip().split(": ", 1)[1]
+        page_before = urllib.request.urlopen(url, timeout=5).read().decode("utf-8")
         origin = url.split("/s/", 1)[0]
         endpoint = url.rsplit("/report", 1)[0] + "/action"
         payload = json.dumps({"id": "global:global-old", "action": "disable"}).encode()
@@ -982,9 +1010,12 @@ for line in sys.stdin:
                                          headers={"Origin": origin, "Content-Type": "application/json"})
         result = json.loads(urllib.request.urlopen(request, timeout=20).read())
         self.assertTrue(result["saved"])
-        self.assertFalse(result["refreshed"])
-        self.assertFalse(result["verified"])
-        self.assertIn("setting changed", result["message"])
+        self.assertTrue(result["refreshed"])
+        self.assertTrue(result["verified"])
+        self.assertIn("counts-only summary could not refresh", result["message"])
+        page_after = urllib.request.urlopen(url, timeout=5).read().decode("utf-8")
+        self.assertNotEqual(page_after, page_before)
+        self.assertIn("Disabled in config", page_after)
         self.assertFalse(tomllib.loads(self.config.read_text())["mcp_servers"]["global-old"]["enabled"])
 
     def test_wrong_confirmation_cancels_without_changes(self):
