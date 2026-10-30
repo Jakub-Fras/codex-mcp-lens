@@ -3129,9 +3129,30 @@ def remove_server(config_path: Path, row: dict) -> None:
     print(f"{action} for {row['name']!r}.")
 
 
+def refresh_managed_report(codex_home: Path, project_dir: Path,
+                           share_path: Path | None = None) -> tuple[bytes, bool]:
+    """Return fresh private report bytes, even if the optional summary fails."""
+    with tempfile.TemporaryDirectory(prefix="mcp-lens-manager-") as directory:
+        staged_report = Path(directory) / "report.html"
+        refresh = subprocess.run(
+            [sys.executable, str(Path(__file__).resolve()), "--home", str(codex_home),
+             "report", "--project", str(project_dir), "--output", str(staged_report)] +
+            (["--share-output", str(share_path)] if share_path else []),
+            capture_output=True, text=True, timeout=60, check=False)
+        if not staged_report.is_file():
+            raise ValueError("The report could not refresh. Run the report again.")
+        body = staged_report.read_bytes()
+    return body, refresh.returncode == 0
+
+
 def serve_report(codex_home: Path, project_dir: Path, report_path: Path,
                  share_path: Path | None = None, open_browser: bool = True) -> None:
-    """Serve the private report and one narrowly scoped local disable action."""
+    """Serve trusted report bytes and local controls for Codex settings."""
+    try:
+        trusted_body, initial_summary_ready = refresh_managed_report(codex_home, project_dir,
+                                                                      share_path)
+    except (OSError, ValueError, UnicodeDecodeError, subprocess.TimeoutExpired) as exc:
+        raise SystemExit(f"The local manager could not create a fresh report: {exc}") from exc
     token = secrets.token_urlsafe(32)
     prefix = f"/s/{token}"
     config_path = codex_home / "config.toml"
@@ -3160,14 +3181,10 @@ def serve_report(codex_home: Path, project_dir: Path, report_path: Path,
             if not self.valid_host() or self.path != prefix + "/report":
                 self.send_error(404)
                 return
-            try:
-                body = report_path.read_bytes()
-            except OSError:
-                self.send_error(503)
-                return
-            self.send_private(200, body, "text/html; charset=utf-8")
+            self.send_private(200, trusted_body, "text/html; charset=utf-8")
 
         def do_POST(self) -> None:
+            nonlocal trusted_body
             origin = f"http://127.0.0.1:{self.server.server_port}"
             if (not self.valid_host() or self.path != prefix + "/action"
                     or self.headers.get("Origin") != origin
@@ -3206,14 +3223,14 @@ def serve_report(codex_home: Path, project_dir: Path, report_path: Path,
                     result = (disable_entry(config_path, row) if action == "disable" else
                               remove_direct_mcp_entry(config_path, row))
                     saved_change = True
-                    refresh = subprocess.run(
-                        [sys.executable, str(Path(__file__).resolve()), "--home", str(codex_home),
-                         "report", "--project", str(project_dir), "--output", str(report_path)] +
-                        (["--share-output", str(share_path)] if share_path else []),
-                        capture_output=True, text=True, timeout=60, check=False)
-                    if refresh.returncode:
-                        raise ValueError("The setting was saved, but the report could not refresh. Run the report again.")
+                    trusted_body, share_ready = refresh_managed_report(codex_home, project_dir,
+                                                                       share_path)
                     refreshed = True
+                    try:
+                        write_private_html(report_path, trusted_body.decode("utf-8"))
+                        report_saved = True
+                    except (OSError, UnicodeDecodeError):
+                        report_saved = False
                     updated = codex_runtime_snapshot(codex_home, project_dir)
                     if action == "remove":
                         effective_now = updated.get("config") if isinstance(updated.get("config"), dict) else None
@@ -3242,6 +3259,10 @@ def serve_report(codex_home: Path, project_dir: Path, report_path: Path,
                         message = result + ". Codex now reports it off."
                     else:
                         message = result + ". The current state could not be confirmed; review the refreshed report."
+                    if not share_ready:
+                        message += " The counts-only summary could not refresh."
+                    if not report_saved:
+                        message += " The saved HTML report could not update; this browser view is current."
                     payload = {"saved": True, "refreshed": refreshed, "verified": verified, "message": message}
                     status = 200
                 except (OSError, ValueError, KeyError, SystemExit, subprocess.TimeoutExpired) as exc:
@@ -3263,6 +3284,8 @@ def serve_report(codex_home: Path, project_dir: Path, report_path: Path,
     url = f"http://127.0.0.1:{server.server_port}{prefix}/report"
     print("MCP Lens is running on this computer only. Close this Terminal window to stop managing connections.", flush=True)
     print(f"Open this private report: {url}", flush=True)
+    if not initial_summary_ready:
+        print("The counts-only summary could not refresh. The private browser view is current.", flush=True)
     if open_browser:
         webbrowser.open(url)
     try:
